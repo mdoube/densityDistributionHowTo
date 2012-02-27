@@ -1,0 +1,35 @@
+http://bonej.org/develop
+
+Muokkaa koodia michaelBoneJ hakemistossa
+michaelBoneJ/src hakemistosta loytyy compile.bat, joka kaantaa...
+
+Git asennettu, kayta git bashia gittaamiseen...
+
+Luo git bashilla ssh-key (http://help.github.com/win-set-up-git/):
+ssh-keygen -t rsa -C "tjrantal@gmail.com"
+valitse sopiva hakemisto, entteria
+lisaa passphrase (tarvitsee muistaa jatkossa...).
+
+Avaa id_rsa.pub, joka juuri luotiin ja kopioi sisalto githubiin.
+
+Branchin hakeminen gitista:
+
+Luo hakemisto, mene sinne
+git init							//valmistele tyhja git-hakemisto
+git remote add michael git://github.com/mdoube/BoneJ.git 	//Lisaa BoneJ
+git remote add origin git://github.com:tjrantal/BoneJ	 	//Lisaa BoneJ repository itselle (olisin ehka voinut kayttaa tuota michaelia?)
+git fetch michael						//Update branches
+git checkout master						//Checkout code from master
+
+Do changes to code
+
+git merge michael/from-timo					//Merge changes to master?
+git commit -am "Message"					//Commit changes
+git push origin master						//Push changes to my boneJ git repository
+
+Make pull request to Michael at github (press make pull request, type in title and cover letter and send the request).
+
+KAYTANNON PELISAANTOJA
+Joka kerta, kun aloitan tekemaan muutoksia, pull michael -> pysyy koodi up to date... (pull seka hakee, etta mergeaa) -> helpottaa Michaelin hommaa
+Pienia muutoksia valiin git commit -a.
+Push origin master ja Pull request aina paivan paatteeksi, niin paivittyy muutokset michaelinkin koneelle.
