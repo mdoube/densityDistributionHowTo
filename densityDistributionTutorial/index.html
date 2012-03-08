@@ -1,151 +1,207 @@
-<html>
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+	<title>bonej.org :: User Guide - pQCT Density Distribution</title>
+   <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
+	<meta name="Keywords" content="BoneJ, pQCT, Rantalainen" />
+	<meta name="Description" content="Density distribution of mineral in pQCT images" />
+	
+	<link rel="stylesheet" href="bonej.css" />
+	<link rel="icon" type="image/png" href="images/bonej_icon.png" />
+
+
+</head>
+
 <body>
-<table width = 600 align = center><tr><td>
-	<a href="boneJ.7z">Source files</a><br>
-	<br>
-	<H3>How to use the Density Distribution analysis:</H3>
-	<ul>
+
+<!-- MENU On the left side - site navigation -->
+
+<div id="Menu" class="menu">
+	
+	<!--#include file="leftbar.html"-->
+
+</div>
+
+<!-- MENU On the right side - page navigation -->
+
+<div id="Menur">
+
+	<h4>Page Contents</h4>
+
+	<a href="#top" title="Back to the top of the page">Top</a>
+
+	<a href="#align" title="How are results aligned?">Alignment</a>
+	
+	<a href="#batch" title="Batch mode example">Batch mode</a>
+
+</div>
+
+
+<!-- Content -->
+<div id="Content">
+
+<h2>pQCT Density Distribution</h2>
+
+<p>
+This plugin performs regional bone mineral density calculations, following the method as published by:
+<br /><br />
+Rantalainen T, Nikander R, Heinonen A, Daly RM, Sievanen H. An open source approach for regional cortical bone mineral density analysis. <a href="http://www.ismni.org/jmni/pdf/45/04RANTALAINEN.pdf">J. Musculoskelet. Neuronal Interact. 2011 Sep;11(3):243-8</a>.
+<br /><br />
+If you use this program, or the  Stratec pQCT file format reader in your work, please cite this paper. Contact Timo Rantalainen for further details on the functionality of this plugin, to request features or report bugs.
+</p>
+<!-- pasted section -->
+
+<h3>How to use the Density Distribution analysis:</h3>
+
+<ul>
 		<li>Open tibial mid-shaft image file: File -> import -> Stratec pQCT (the analysis works also on DICOM files).
-		<li>Run the distribution analysis Distribution: Plugins -> pQCT -> Distribution Analysis
+		</li><li>Run the distribution analysis Distribution: Plugins -> pQCT -> Distribution Analysis</li>
 		<li>A window pops up with selections. Many of the default selections probably work for you, but remember to select at least one analysis!
 		<ul>
 			<li>Make sure that the scaling coefficient, constant and in-plane pixel size are correct!
-			<li>Area and BMD thresholds may need adjustments (e.g. somewhere between 169 to 280 mg/cm3 is routinely used for distal bone sites. Similar adjustments are needed for bones with narrow cortices, such as in children or in the elderly).
+			</li><li>Area and BMD thresholds may need adjustments (e.g. somewhere between 169 to 280 mg/cm3 is routinely used for distal bone sites. Similar adjustments are needed for bones with narrow cortices, such as in children or in the elderly).</li>
 		</ul>
-		<br>
+		</li>
+</ul>
+		
+			<img alt="screenshot" src="images/selections.png"/>
+			<p></p>	
+<ul>
+		<li><b>Flipping image prior to analysis, preventing filtering and removing measurement tube from soft tissue analysis</b>
 		<ul>
-			<img src="selections.png">	
-			<br><br>
-			<li><b>Flipping image prior to analysis, preventing filtering and removing measurement tube from soft tissue analysis</b>
-			<ul>
-				<li><b>Flip horizontal</b> Used to flip the image vertically [sic] (Stratec produces the image rotated by 90 deg from what one might have expected).
-				<li><b>Flip vertical</b> Used to flip the image horizontally [sic] (Stratec produces the image rotated by 90 deg from what one might have expected).
-				<li><b>No filtering</b> Used to prevent 3x3 median filtering of bone analyses and 7x7 filtering of soft tissue analyses. 
-				<li><b>Measurement tube</b> Used to remove the measurement tube used for lower limb measurements with some versions of the XCT3000 measurement device
+			<li><b>Flip horizontal</b> Used to flip the image vertically [sic] (Stratec produces the image rotated by 90 deg from what one might have expected).
+			</li><li><b>Flip vertical</b> Used to flip the image horizontally [sic] (Stratec produces the image rotated by 90 deg from what one might have expected).
+			</li><li><b>No filtering</b> Used to prevent 3x3 median filtering of bone analyses and 7x7 filtering of soft tissue analyses. 
+			</li><li><b>Measurement tube</b> Used to remove the measurement tube used for lower limb measurements with some versions of the XCT3000 measurement device
 				from soft tissue analyses.
-			</ul>
-			<br>
-			<li><b>Thresholds, ROI-selections and results alignment</b>
-			<ul>
-				<li><b>Air threshold</b> Used to separate the whole limb from the background (used in soft tissue analyses to create a limb template or 
+		</ul>
+		</li>
+
+		<li><b>Thresholds, ROI-selections and results alignment</b>
+		<ul>
+			<li><b>Air threshold</b> Used to separate the whole limb from the background (used in soft tissue analyses to create a limb template or 
 				if Roi selection is Central or peripheral. In soft tissue analysis limb includes >= air threshold.). 
-				<li><b>Fat threshold</b> Used to create a fat template within the limb area (used in soft tissue analyses, i.e.
-				fat includes >=air thershold to <fat threshold not within the muscle template). 
-				<li><b>Muscle threshold</b> Used to create a muscle template for soft tissue analysis (All areas within the limb template traced with density >= muscle threshold contributing
-				> 1% in addition to the muscle areas already added starting from largest. Thus muscle template area may include pixels with lower density). 
-				<li><b>Marrow threshold</b> Used to separate marrow from bone (<= marrow threshold within bone area is assigned to marrow). 
-				<li><b>Soft tissue threshold</b> Used to remove bones from the muscle template (All areas traced with density >= soft tissue threshold 
+			</li><li><b>Fat threshold</b> Used to create a fat template within the limb area (used in soft tissue analyses, i.e.
+				fat includes &gt;=air threshold to &lt;fat threshold not within the muscle template). 
+			</li><li><b>Muscle threshold</b> Used to create a muscle template for soft tissue analysis (All areas within the limb template traced with density &gt;= muscle threshold contributing
+				&gt; 1% in addition to the muscle areas already added starting from largest. Thus muscle template area may include pixels with lower density).
+			</li><li><b>Marrow threshold</b> Used to separate marrow from bone (&lt;= marrow threshold within bone area is assigned to marrow). 
+			</li><li><b>Soft tissue threshold</b> Used to remove bones from the muscle template (All areas traced with density >= soft tissue threshold 
 				(i.e. bones) will be subtracted from the muscle (and fat) templates). 
-				<li><b>Area threshold</b> Used to separate bone from everything else. Theshold used for total area (ToA) and bmd (ToD) as well as for cortical area (CoA) and SSI and BSId calculations. 
-				<li><b>BMD threshold</b> Used to separate cortical bone from everything else. Theshold used for density distribution and cortical density (CoD) analyses.
-				<li><b>Scaling coefficient</b> Used as the coefficient to scale the raw integer values read from the image file into BMD values
+			</li><li><b>Area threshold</b> Used to separate bone from everything else. Theshold used for total area (ToA) and bmd (ToD) as well as for cortical area (CoA) and SSI and BSId calculations. 
+			</li><li><b>BMD threshold</b> Used to separate cortical bone from everything else. Theshold used for density distribution and cortical density (CoD) analyses.
+			</li><li><b>Scaling coefficient</b> Used as the coefficient to scale the raw integer values read from the image file into BMD values
 				, i.e. b in y = a+bx, where b is the raw value (N.B. in case of Stratec files a value of 2^15 is subtracted prior to applying 
 				the scaling to account for the fact that the values were stored as 16 bit signed integers
 				, while ImageJ uses 16 bit unsigned integers. Also, the scaling is retrieved from a list of Stratec .TYP-files according to the image header information.
 				In case of DICOM-files, the DICOM scaling (typically y = -1000+1x) is applied prior to applying this scaling.). 
-				<li><b>Scaling constant</b> Used as the constant in scaling the raw integer values read from the image file into BMD values, i.e. a in y = a+bx. 
-				<li><b>Roi selection</b> Used to define, which bone is to be analysed. Results are always produced for one bone at a time.
-				<li><b>Soft Tissue Roi selection</b> Used to define, which soft tissue area is analysed (in case of the image containing more than one.
+			</li><li><b>Scaling constant</b> Used as the constant in scaling the raw integer values read from the image file into BMD values, i.e. a in y = a+bx. 
+			</li><li><b>Roi selection</b> Used to define, which bone is to be analysed. Results are always produced for one bone at a time.
+			</li><li><b>Soft Tissue Roi selection</b> Used to define, which soft tissue area is analysed (in case of the image containing more than one.
 				Results are always produced for one soft tissue area at a time.
-				<li><b>Rotation selection</b> Used to define, how the mass distribution, concentric density distribution and density distribution results are aligned.
-			</ul>
-			<br>
-			<li><b>Analysis selections</b>
-			<ul>
-				<li><b>Analyse cortical results</b> Whether (ticked) or not to analyse ToA, ToD, SSI, CoA, CoD and BSId.
-				<li><b>Analyse mass distribution</b> Whether (ticked) or not to analyse mass distribution.
-				<li><b>Analyse concentric density distribution</b> Whether (ticked) or not to analyse concerntric density distribution. Useful for e.g. distal bone without medullary cavity. 
-				Analyses density distribution in 10 anatomical concentric rings starting from the centre of the bone area.
-				<li><b>Analyse density distribution</b> Whether (ticked) or not to analyse density distribution. N.B. will not produce meaningful results for bones without medullary cavity.
-				<li><b>Analyse soft tissues</b> Whether (ticked) or not to analyse soft tissues.
-				<li><b>Prevent peeling PVE pixels</b> Whether (ticked) or not to prevent peeling outermost and innermost layer of pixels in density distribution analysis.
-				Useful e.g. for enabling analysis in subjects with thin cortices. N.B. having included PVE pixels should be kept in mind while interpreting the results !
-				<li><b>Allow cleaving</b> Used to separate bones/soft tissue areas, which are connected with a narrow struct*.
-				<li><b>Suppress result image</b> The analysis pops up a result image, which may be suppressed by ticking this box. Useful e.g. for batch processing.
-				<li><b>Limit ROI search to manually selected</b> If ticked, only manually delineated ROI will be searched for a bone (The ROI selected with ImageJ ROI tools prior to executing the Distribution Analysis is used).
-				<li><b>Set distribution results rotation manually</b> If ticked, the density distribution results will be rotated according to the value given in the text box below.
-				<li><b>Manual rotation</b> If the tick box above is ticked, the density distribution results will be rotated according to the value given in the text (useful, e.g. when the automatic rotation fails).
-			</ul>
-			<br>
-			<li><b>Distribution analysis flipping and results visualization</b>
-			<ul>
-			<li><b>Guess flip</b> If ticked, will allow trying to guess whether results need to be flipped.
-			<li><b>Guess right</b> If ticked, will try to guess whether results need to be flipped. If selected bone is closer to image left/upper border (Stacked not ticked or ticked, respectively), the results are not flipped.
-			<li><b>Guess larger</b> If ticked, will try to guess whether results need to be flipped. If larger bone is closer to image left/upper border (Stacked not ticked or ticked, respectively), the results are not flipped.
-			<li><b>Stacked bones</b> Used only if guess right or guess larger is ticked. Stacked means that the bones are expected to be on top of each other in the image (e.g. tibial mid-shaft in Stratec images).
-			<li><b>Guess stacked</b> Used only if guess right or guess larger is ticked. Tries to guess whether the bones are stacked. The default guess is not, but if the 
-			y-axis distance of the centres of the two largest bones differs by more than 1.1 time the x-axis distance, the bones are considered stacked.
-			<li><b>Invert flip guess</b> If ticked will invert the flip guess made by guess right or guess larger. Useful for e.g. analysing two bones from the same image in 
-			order to align the distribution results similarly.
-			<li><b>Flip distribution results</b> If ticked, the distribution results will be flipped to a mirror image. Useful for e.g. comparing left to right leg.
-			<li><b>Save visual result image on disk</b> If ticked, will save visual result image on disk into the path given in the text box below. Useful e.g. for batch processing, allowing visual inspection of the results after running the batch.
-			<li><b>Image save path</b> If the above check box is ticked, the path given in this text box is used as the path into which the visual result images are saved to, i.e. c:/path/to/save/to/. remember to add the trailing /. Either / or \ may be used in the path.
+			</li><li><b>Rotation selection</b> Used to define, how the mass distribution, concentric density distribution and density distribution results are aligned.</li>
 		</ul>
-		<li>Hit OK and the analysis should run...
-	</ul>
-	<br>
-	<H3>How are the density distribution results aligned?</H3>
-	<ul>
+		</li>
+
+		<li><b>Analysis selections</b>
+		<ul>
+			<li><b>Analyse cortical results</b> Whether (ticked) or not to analyse ToA, ToD, SSI, CoA, CoD and BSId.
+			</li><li><b>Analyse mass distribution</b> Whether (ticked) or not to analyse mass distribution.
+			</li><li><b>Analyse concentric density distribution</b> Whether (ticked) or not to analyse concerntric density distribution. Useful for e.g. distal bone without medullary cavity. 
+				Analyses density distribution in 10 anatomical concentric rings starting from the centre of the bone area.
+			</li><li><b>Analyse density distribution</b> Whether (ticked) or not to analyse density distribution. N.B. will not produce meaningful results for bones without medullary cavity.
+			</li><li><b>Analyse soft tissues</b> Whether (ticked) or not to analyse soft tissues.
+			</li><li><b>Prevent peeling PVE pixels</b> Whether (ticked) or not to prevent peeling outermost and innermost layer of pixels in density distribution analysis.
+				Useful e.g. for enabling analysis in subjects with thin cortices. N.B. having included PVE pixels should be kept in mind while interpreting the results !
+			</li><li><b>Allow cleaving</b> Used to separate bones/soft tissue areas, which are connected with a narrow struct*.
+			</li><li><b>Suppress result image</b> The analysis pops up a result image, which may be suppressed by ticking this box. Useful e.g. for batch processing.
+			</li><li><b>Limit ROI search to manually selected</b> If ticked, only manually delineated ROI will be searched for a bone (The ROI selected with ImageJ ROI tools prior to executing the Distribution Analysis is used).
+			</li><li><b>Set distribution results rotation manually</b> If ticked, the density distribution results will be rotated according to the value given in the text box below.
+			</li><li><b>Manual rotation</b> If the tick box above is ticked, the density distribution results will be rotated according to the value given in the text (useful, e.g. when the automatic rotation fails).</li>
+		</ul>
+		</li>
+
+		<li><b>Distribution analysis flipping and results visualization</b>
+		<ul>
+			<li><b>Guess flip</b> If ticked, will allow trying to guess whether results need to be flipped.
+			</li><li><b>Guess right</b> If ticked, will try to guess whether results need to be flipped. If selected bone is closer to image left/upper border (Stacked not ticked or ticked, respectively), the results are not flipped.
+			</li><li><b>Guess larger</b> If ticked, will try to guess whether results need to be flipped. If larger bone is closer to image left/upper border (Stacked not ticked or ticked, respectively), the results are not flipped.
+			</li><li><b>Stacked bones</b> Used only if guess right or guess larger is ticked. Stacked means that the bones are expected to be on top of each other in the image (e.g. tibial mid-shaft in Stratec images).
+			</li><li><b>Guess stacked</b> Used only if guess right or guess larger is ticked. Tries to guess whether the bones are stacked. The default guess is not, but if the 
+				y-axis distance of the centres of the two largest bones differs by more than 1.1 time the x-axis distance, the bones are considered stacked.
+			</li><li><b>Invert flip guess</b> If ticked will invert the flip guess made by guess right or guess larger. Useful for e.g. analysing two bones from the same image in 
+				order to align the distribution results similarly.
+			</li><li><b>Flip distribution results</b> If ticked, the distribution results will be flipped to a mirror image. Useful for e.g. comparing left to right leg.
+			</li><li><b>Save visual result image on disk</b> If ticked, will save visual result image on disk into the path given in the text box below. Useful e.g. for batch processing, allowing visual inspection of the results after running the batch.
+			</li><li><b>Image save path</b> If the above check box is ticked, the path given in this text box is used as the path into which the visual result images are saved to, i.e. c:/path/to/save/to/. remember to add the trailing /. Either / or \ may be used in the path.</li>
+		</ul>
+		</li>
+		
+		<li>Hit OK and the analysis should run...</li>
+</ul>
+
+<h3>How are the density distribution results aligned?</h3>
+
+<ul>
 	<li>Endo- and pericortical radii, and endo-, mid- and pericortical densities are produced for 36 10 degree sectors by the analysis plugin.
-	<li>The sector from 0 - 10 deg opens always directly to right in the visual result image. 
-	<li>Sectors increase into clockwise direction in the visual results image, or counter clockwise, if results are flipped.
+	</li><li>The sector from 0 - 10 deg opens always directly to right in the visual result image. 
+	</li><li>Sectors increase into clockwise direction in the visual results image, or counter clockwise, if results are flipped.
 	<ul>
 		<li>If you have selected flip distribution results, the sectors are still the same, but you will notice that the visual distribution result has been mirrored about the horizontal axis. This flipping is implemented by reversing the distribution results vectors and by making sure that the 0 - 10 deg sector remains the same.	
-		<li>The color of the line used to delineate the endo- and pericortical border indicates in which direction the sector angle increases. 0 angle is blue and 360 is green/red.
-		<li>In addition, the original and rotated x- and y- axes are highlighted in the visual image (the origin of which is the origin of the distribution results). The axes extend from origin towards positive coordinate values, green/cyan x-axis and blue/purple y-axis.
+		</li><li>The color of the line used to delineate the endo- and pericortical border indicates in which direction the sector angle increases. 0 angle is blue and 360 is green/red.
+		</li><li>In addition, the original and rotated x- and y- axes are highlighted in the visual image (the origin of which is the origin of the distribution results). The axes extend from origin towards positive coordinate values, green/cyan x-axis and blue/purple y-axis.</li>
 	</ul>
-	</ul>
-	<br>
-	<H3>Batch processing sample</H3>
+	</li>
+</ul>
+
+<h3>Batch processing sample</h3>
+
+<ul>
+	<li><a href = "images/SyntheticData.zip">Synthetic data</a>, which may be used for testing, whether the analysis tool gives expected results. The source to produce the synthetic data and the expected results are also included.<br/>
+	</li><li>An ImageJ <a href="images/SyntheticDataTest.ijm">macro</a> to batch process the synthetic data.
 	<ul>
-		<li><a href = "SyntheticData.zip">Synthetic data</a>, which may be used for testing, whether the analysis tool gives expected results. The source to produce the synthetic data and the expected results are also included.<br>
-		<li>An ImageJ <a href="SyntheticDataTest.ijm">macro</a> to batch process the synthetic data.
-		<ul>
-			<li>Open the SyntheticDataTest.ijm with your favourite text editor (e.g. <a href = "http://notepad-plus-plus.org/">notepad++</a>, right click -> open with in windows)
-			<li>Change the paths on line 2 and 3 to ones that match your computer, i.e.:<br>
-				line 2: <b>sourceDir = "C:/Oma/Deakin/METODOLOGIA2010/Julkaisu/webStart/SyntheticData/";</b> Replace everything between the "" with your path, C:/your/path/to/synthetic/images/. Remeber the trailing /<br>
-				line 3: <b>visualDir = "C:/Oma/Deakin/METODOLOGIA2010/Julkaisu/webStart/sCheckImageJ/";</b> Replace everything between the "" with your pathC:/your/path/to/visual/results/. Remeber the trailing /<br>
-				N.B. The paths need to exist prior to executing the macro. In addition, windows operating system does not seem to work if the path contains spaces.
-				If you are working with windows and do have spaces in your path, replace the / with \\.<br>
-			<li>Remeber to save your macro (perhaps with a new name)
-		</ul>
-		<li>Once you have corrected the paths to your macro file, run the macro with ImageJ: Plugins -> Macros -> Run -> browse to your saved macro and click open. Wait for the macro to run ...
-		<li>Once the macro is finished, you should be left with a Results window, whic you may save File -> Save As.
-		<li>Open the resulting file with excel or open office or some other suitable program and the results should match the ones within the Synthetic data provided above. N.B. the result file in the Synthetic data .zip is from the sofware provided with the original publication that the plugin is a spin-off from. In that software, the results were always flipped and consequently, in the macro above, the results are flipped (line 7 remove flip_distribution_results to not flip the results). The flipping behaviour was changed from the previoius software to the BoneJ plugin to make the results conform with the visual results (which is perhaps more intuitive).
+		<li>Open the SyntheticDataTest.ijm with your favourite text editor (e.g. <a href = "http://notepad-plus-plus.org/">notepad++</a>, right click -> open with in windows)
+		</li><li>Change the paths on line 2 and 3 to ones that match your computer, i.e.:<br/>
+			line 2: <b>sourceDir = "C:/Oma/Deakin/METODOLOGIA2010/Julkaisu/webStart/SyntheticData/";</b> Replace everything between the "" with your path, C:/your/path/to/synthetic/images/. Remeber the trailing /<br/>
+			line 3: <b>visualDir = "C:/Oma/Deakin/METODOLOGIA2010/Julkaisu/webStart/sCheckImageJ/";</b> Replace everything between the "" with your pathC:/your/path/to/visual/results/. Remeber the trailing /<br/>
+			N.B. The paths need to exist prior to executing the macro. In addition, windows operating system does not seem to work if the path contains spaces.
+			If you are working with windows and do have spaces in your path, replace the / with \\.<br/>
+		</li><li>Remember to save your macro (perhaps with a new name)</li>
 	</ul>
-	N.B. the plug-in works with setBatchMode(true), but does not work with command line execution using the -batch option (or at least it didn't work when I tried to save the results window from command line executed macro with saveAs("Results", savePath+saveFileName), whereas the same macro run from command line with -macro worked as expected).
-	<br>
-	<H3>What do the results represent?</H3>
-		<ul>
-			<li><b>Radial distribution  (Radial division X vBMD [mg/cm³])</b>
-			<br><img src="radial.png"><br>
-			<ul>
-				<li>The mean of the thirty six 10 degree sector within a given anatomical ring is reported as the density of that ring.
-			</ul>
-			<li><b>Polar distribution (Polar sector X vBMD [mg/cm³])</b>
-			<br><img src="polar.png"><br>
-			<ul>
-				<li>The mean of the three radial divisions within a given sector is reported as the density of that sector.
-			</ul>
-			<li><b>Radii distribution  (X° -X+10° endocortical radius [mm])</b>
-			<br><img src="radii.png"><br>
-			<ul>
-				<li>Endo- and pericortical radii are given as the distance from the centroid of the marrow cavity to the endo- and pericortical border, respectively. The radii are calculated prior to peeling off the layers of pixels from endosteal and periosteal border.
-			</ul>
-			
-			
-		</ul>
-	<br>
-	<H3>Citation</H3>
-	Density distribution analysis was published as a journal paper in the open access <a href="http://www.ismni.org/jmni/">"Journal of Musculoskeletal and Neuronal Interactions"</a>: <a href ="http://www.ismni.org/jmni/pdf/45/04RANTALAINEN.pdf">Rantalainen T, Nikander R, Heinonen A, Daly RM, Sievanen H. An open source approach for regional cortical bone mineral density analysis. J Musculoskelet Neuronal Interact. 2011 Sep;11(3):243-8.</a><br>
-	<br>
-	<H3>Acknowledgements</H3>
-	<ul>
-		<li><a href="http://www.galileo-training.com">Stratec Medizintechnik GmbH (Pforzheim, Germany)</a> for providing the file specification and calibration files used in their XCT pQCT-devices.
-	</ul>
-	<br>
-	*Cleaving is made by looking at the ratios of distances between two points along the edge and the shortest distance between the points. If the maximum of the ratio is high enough (3 was arbitrarily selected), the highest ratio points will be connected with a straigth line and one of the resulting edges will be discarded. E.g. for a circle, the maximum ratio is (pi/2)/d ~= 1.57 and for square the maximum ratio is 2/sqrt(2) = sqrt(2) ~= 1.41.<br>
-	<br>
-	</td></tr></table>
+	</li>
+	<li>Once you have corrected the paths to your macro file, run the macro with ImageJ: Plugins -> Macros -> Run -> browse to your saved macro and click open. Wait for the macro to run ...
+	</li><li>Once the macro is finished, you should be left with a Results window, which you may save File -> Save As.
+	</li><li>Open the resulting file with excel or open office or some other suitable program and the results should match the ones within the Synthetic data provided above. N.B. the result file in the Synthetic data .zip is from the sofware provided with the original publication that the plugin is a spin-off from. In that software, the results were always flipped and consequently, in the macro above, the results are flipped (line 7 remove flip_distribution_results to not flip the results). The flipping behaviour was changed from the previoius software to the BoneJ plugin to make the results conform with the visual results (which is perhaps more intuitive).</li>
+</ul>
+
+	<p>N.B. the plug-in works with setBatchMode(true), but does not work with command line execution using the -batch option (or at least it didn't work when I tried to save the results window from command line executed macro with saveAs("Results", savePath+saveFileName), whereas the same macro run from command line with -macro worked as expected).</p>
+
+<h3>Acknowledgements</h3>
+
+<ul>
+	<li><a href="http://www.galileo-training.com">Stratec Medizintechnik GmbH (Pforzheim, Germany)</a> for providing the file specification and calibration files used in their XCT pQCT-devices.</li>
+</ul>
+
+<h3>Footnote</h3>
+<p>
+	*Cleaving is made by looking at the ratios of distances between two points along the edge and the shortest distance between the points. If the maximum of the ratio is high enough (3 was arbitrarily selected), the highest ratio points will be connected with a straigth line and one of the resulting edges will be discarded. E.g. for a circle, the maximum ratio is (pi/2)/d ~= 1.57 and for square the maximum ratio is 2/sqrt(2) = sqrt(2) ~= 1.41.<br/>
+</p>
+
+<!-- end pasted section -->
+
+
+
+		
+
+<!-- Footer -->
+
+<!--#include file="footer.html" -->
+
+</div>
+
 </body>
+
 </html>
