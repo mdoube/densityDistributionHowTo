@@ -115,7 +115,28 @@
 	</ul>
 	N.B. the plug-in works with setBatchMode(true), but does not work with command line execution using the -batch option (or at least it didn't work when I tried to save the results window from command line executed macro with saveAs("Results", savePath+saveFileName), whereas the same macro run from command line with -macro worked as expected).
 	<br>
+	<H3>What do the results represent?</H3>
+		<ul>
+			<li><b>Radial distribution  (Radial division X vBMD [mg/cm³])</b>
+			<br><img src="radial.png"><br>
+			<ul>
+				<li>The mean of the thirty six 10 degree sector within a given anatomical ring is reported as the density of that ring.
+			</ul>
+			<li><b>Polar distribution (Polar sector X vBMD [mg/cm³])</b>
+			<br><img src="polar.png"><br>
+			<ul>
+				<li>The mean of the three radial divisions within a given sector is reported as the density of that sector.
+			</ul>
+			<li><b>Radii distribution  (X° -X+10° endocortical radius [mm])</b>
+			<br><img src="radii.png"><br>
+			<ul>
+				<li>Endo- and pericortical radii are given as the distance from the centroid of the marrow cavity to the endo- and pericortical border, respectively. The radii are calculated prior to peeling off the layers of pixels from endosteal and periosteal border.
+			</ul>
+			
+			
+		</ul>
 	<br>
+	<H3>Citation</H3>
 	Density distribution analysis was published as a journal paper in the open access <a href="http://www.ismni.org/jmni/">"Journal of Musculoskeletal and Neuronal Interactions"</a>: <a href ="http://www.ismni.org/jmni/pdf/45/04RANTALAINEN.pdf">Rantalainen T, Nikander R, Heinonen A, Daly RM, Sievanen H. An open source approach for regional cortical bone mineral density analysis. J Musculoskelet Neuronal Interact. 2011 Sep;11(3):243-8.</a><br>
 	<br>
 	<H3>Acknowledgements</H3>
