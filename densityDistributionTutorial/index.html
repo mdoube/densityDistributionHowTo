@@ -46,11 +46,17 @@
 <h2>pQCT Density Distribution</h2>
 
 <p>
-This plugin performs regional bone mineral density calculations, following the method as published by:
-<br /><br />
-Rantalainen T, Nikander R, Heinonen A, Daly RM, Sievanen H. An open source approach for regional cortical bone mineral density analysis. <a href="http://www.ismni.org/jmni/pdf/45/04RANTALAINEN.pdf">J. Musculoskelet. Neuronal Interact. 2011 Sep;11(3):243-8</a>.
-<br /><br />
-If you use this program, or the  Stratec pQCT file format reader in your work, please cite this paper. Contact Timo Rantalainen for further details on the functionality of this plugin, to request features or report bugs.
+	This plugin is designed to perform the following pQCT analyses:
+	<ul>
+		<li>Conventional bone analyses (e.g. cortical area and volumetric bone mineral density)</li>
+		<li>Regional bone mineral density calculations (density distribution<sup>1</sup>)</li>
+		<li>Bone marrow analysis for a tubular bone<sup>2</sup></li>
+		<li>Conventional soft tissue analyses (e.g. subcutaneous fat cross-sectional area, muscle cross-sectional area)<sup>2</sup></li>
+	</ul>
+	<sup>1</sup>Rantalainen T, Nikander R, Heinonen A, Daly RM, Sievanen H. An open source approach for regional cortical bone mineral density analysis. <a href="http://www.ismni.org/jmni/pdf/45/04RANTALAINEN.pdf">J. Musculoskelet. Neuronal Interact. 2011 Sep;11(3):243-8</a>.<br />
+	<sup>2</sup> Rantalainen T, Nikander R, Heinonen A, Cervinka T, Sievanen H, Daly RM. Differential Effects of Exercise on Tibial shaft Marrow Density in Young Female Athletes. J. Clin. Endocrinol. Metab., in press.
+	<br /><br />
+	If you use this program, or the  Stratec pQCT file format reader in your work, please cite the pertinent papers. Contact Timo Rantalainen for further details on the functionality of this plugin, to request features or report bugs.
 </p>
 <!-- pasted section -->
 
@@ -155,6 +161,702 @@ If you use this program, or the  Stratec pQCT file format reader in your work, p
 		</li><li>In addition, the original and rotated x- and y- axes are highlighted in the visual image (the origin of which is the origin of the distribution results). The axes extend from origin towards positive coordinate values, green/cyan x-axis and blue/purple y-axis.</li>
 	</ul>
 	</li>
+</ul>
+
+<h3>How are the density distribution results aligned?</h3>
+
+What do the result headings mean?<br/>
+<ul>
+	<li>Alpha [deg] = how many degrees were the results rotated</li>
+	<li>Rotation correction [deg] = correction for centering sector 0</li>
+	<li>Distance between bones[mm] = distance between the centre of bone areas for two bones</li>
+	<li>MuD [mg/cm³] = muscle density (including possible intramuscular fat)</li>
+	<li>MuA [cm²] = muscle area (including possible intramuscular fat)</li>
+	<li>LeanMuD [mg/cm³] = muscle density (excluding possible intramuscular fat)</li>
+	<li>LeanMuA [cm²] = muscle area (excluding possible intramuscular fat)</li>
+	<li>IntraFatD [mg/cm³] = intramuscular fat density</li>
+	<li>IntraFatA [cm²] = intramuscular fat area</li>
+	<li>FatD [mg/cm³] = total fat density (both intra and subcut)</li>
+	<li>FatA [cm²] = total fat area (both intra and subcut)</li>
+	<li>SubCutFatD [mg/cm³] = subcutaneous fat density</li>
+	<li>SubCutFatA [cm²] = subcutaneous fat area</li>
+	<li>LimbD [mg/cm³] = limb density (including bones)</li>
+	<li>LimbA [cm²] = limb area (including bones)</li>
+	<li>Density weighted fat percentage [%]</li>
+	<li>MaMassD [g/cm³] = marrow mass density converted from hydroxyapatite equivalent densities (HA). Works for CT, where water is given a HA value of zero</li>
+	<li>StratecMaMassD [g/cm³] = marrow mass density converted from hydroxyapatite equivalent densities (HA) to mass density. Works for Stratec pQCT, where fat is given a HA value of 0</li>
+	<li>MaD [mg/cm³] = marrow density</li>
+	<li>MaA [mm²] = area included into the marrow analysis (N.B. != MeA)</li>
+	<li>CoD [mg/cm³] = cortical density</li>
+	<li>CoA [mm²] = cortical area</li>
+	<li>Stratec CoD [mg/cm³] = cortical density (pixels need not be continguous as in the analyses conducted by Stratex software. However, if pixels aren't continguous, incorrect ROI is typically defined automatically by the plug-in and the analysis will fail)</li>
+	<li>Stratec CoA [mm²] = cortical area (pixels need not be continguous as in the analyses conducted by Stratex software. However, if pixels aren't continguous, incorrect ROI is typically defined automatically by the plug-in and the analysis will fail)</li>
+	<li>SSI [mm³] = Strength strain index (= density weighted section modulus)</li>
+	<li>SSImax [mm³] = Maximal strength strain index</li>
+	<li>SSImin [mm³] = Minimal strength strain index</li>
+	<li>IPo [mm4] = Polar second moment of area (=polar cross-sectional moment of inertia)</li>
+	<li>Imax [mm4] = Maximal second moment of area (=maximal cross-sectional moment of inertia)</li>
+	<li>Imin [mm4] = minimal second moment of area (=minimal cross-sectional moment of inertia</li>
+	<li>dwIPo [mg/cm] = density weighted polar second moment of area (=polar cross-sectional moment of inertia)</li>
+	<li>dwImax [mg/cm] = density weighted maximal second moment of area (=maximal cross-sectional moment of inertia)</li>
+	<li>dwImin [mg/cm] = density weighted minimal second moment of area (=minimal cross-sectional moment of inertia</li>
+	<li>ToD [mg/cm³] = total density</li>
+	<li>ToA[mm²] = total area</li>
+	<li>MeA [mm²] = non-cortical area (= ToA - CoA)</li>
+	<li>BSId[g²/cm4] = compressive strength index (=ToD^2*ToA)</li>
+	<li>0° - 10° mineral mass [mg]</li>
+	<li>10° - 20° mineral mass [mg]</li>
+	<li>20° - 30° mineral mass [mg]</li>
+	<li>30° - 40° mineral mass [mg]</li>
+	<li>40° - 50° mineral mass [mg]</li>
+	<li>50° - 60° mineral mass [mg]</li>
+	<li>60° - 70° mineral mass [mg]</li>
+	<li>70° - 80° mineral mass [mg]</li>
+	<li>80° - 90° mineral mass [mg]</li>
+	<li>90° - 100° mineral mass [mg]</li>
+	<li>100° - 110° mineral mass [mg]</li>
+	<li>110° - 120° mineral mass [mg]</li>
+	<li>120° - 130° mineral mass [mg]</li>
+	<li>130° - 140° mineral mass [mg]</li>
+	<li>140° - 150° mineral mass [mg]</li>
+	<li>150° - 160° mineral mass [mg]</li>
+	<li>160° - 170° mineral mass [mg]</li>
+	<li>170° - 180° mineral mass [mg]</li>
+	<li>180° - 190° mineral mass [mg]</li>
+	<li>190° - 200° mineral mass [mg]</li>
+	<li>200° - 210° mineral mass [mg]</li>
+	<li>210° - 220° mineral mass [mg]</li>
+	<li>220° - 230° mineral mass [mg]</li>
+	<li>230° - 240° mineral mass [mg]</li>
+	<li>240° - 250° mineral mass [mg]</li>
+	<li>250° - 260° mineral mass [mg]</li>
+	<li>260° - 270° mineral mass [mg]</li>
+	<li>270° - 280° mineral mass [mg]</li>
+	<li>280° - 290° mineral mass [mg]</li>
+	<li>290° - 300° mineral mass [mg]</li>
+	<li>300° - 310° mineral mass [mg]</li>
+	<li>310° - 320° mineral mass [mg]</li>
+	<li>320° - 330° mineral mass [mg]</li>
+	<li>330° - 340° mineral mass [mg]</li>
+	<li>340° - 350° mineral mass [mg]</li>
+	<li>350° - 360° mineral mass [mg]</li>
+	<li>0° - 10° concentric analysis pericortical radius [mm]</li>
+	<li>10° - 20° concentric analysis pericortical radius [mm]</li>
+	<li>20° - 30° concentric analysis pericortical radius [mm]</li>
+	<li>30° - 40° concentric analysis pericortical radius [mm]</li>
+	<li>40° - 50° concentric analysis pericortical radius [mm]</li>
+	<li>50° - 60° concentric analysis pericortical radius [mm]</li>
+	<li>60° - 70° concentric analysis pericortical radius [mm]</li>
+	<li>70° - 80° concentric analysis pericortical radius [mm]</li>
+	<li>80° - 90° concentric analysis pericortical radius [mm]</li>
+	<li>90° - 100° concentric analysis pericortical radius [mm]</li>
+	<li>100° - 110° concentric analysis pericortical radius [mm]</li>
+	<li>110° - 120° concentric analysis pericortical radius [mm]</li>
+	<li>120° - 130° concentric analysis pericortical radius [mm]</li>
+	<li>130° - 140° concentric analysis pericortical radius [mm]</li>
+	<li>140° - 150° concentric analysis pericortical radius [mm]</li>
+	<li>150° - 160° concentric analysis pericortical radius [mm]</li>
+	<li>160° - 170° concentric analysis pericortical radius [mm]</li>
+	<li>170° - 180° concentric analysis pericortical radius [mm]</li>
+	<li>180° - 190° concentric analysis pericortical radius [mm]</li>
+	<li>190° - 200° concentric analysis pericortical radius [mm]</li>
+	<li>200° - 210° concentric analysis pericortical radius [mm]</li>
+	<li>210° - 220° concentric analysis pericortical radius [mm]</li>
+	<li>220° - 230° concentric analysis pericortical radius [mm]</li>
+	<li>230° - 240° concentric analysis pericortical radius [mm]</li>
+	<li>240° - 250° concentric analysis pericortical radius [mm]</li>
+	<li>250° - 260° concentric analysis pericortical radius [mm]</li>
+	<li>260° - 270° concentric analysis pericortical radius [mm]</li>
+	<li>270° - 280° concentric analysis pericortical radius [mm]</li>
+	<li>280° - 290° concentric analysis pericortical radius [mm]</li>
+	<li>290° - 300° concentric analysis pericortical radius [mm]</li>
+	<li>300° - 310° concentric analysis pericortical radius [mm]</li>
+	<li>310° - 320° concentric analysis pericortical radius [mm]</li>
+	<li>320° - 330° concentric analysis pericortical radius [mm]</li>
+	<li>330° - 340° concentric analysis pericortical radius [mm]</li>
+	<li>340° - 350° concentric analysis pericortical radius [mm]</li>
+	<li>350° - 360° concentric analysis pericortical radius [mm]</li>
+	<li>Division 1 sector 0° - 10° vBMD [mg/cm³]</li>
+	<li>Division 1 sector 10° - 20° vBMD [mg/cm³]</li>
+	<li>Division 1 sector 20° - 30° vBMD [mg/cm³]</li>
+	<li>Division 1 sector 30° - 40° vBMD [mg/cm³]</li>
+	<li>Division 1 sector 40° - 50° vBMD [mg/cm³]</li>
+	<li>Division 1 sector 50° - 60° vBMD [mg/cm³]</li>
+	<li>Division 1 sector 60° - 70° vBMD [mg/cm³]</li>
+	<li>Division 1 sector 70° - 80° vBMD [mg/cm³]</li>
+	<li>Division 1 sector 80° - 90° vBMD [mg/cm³]</li>
+	<li>Division 1 sector 90° - 100° vBMD [mg/cm³]</li>
+	<li>Division 1 sector 100° - 110° vBMD [mg/cm³]</li>
+	<li>Division 1 sector 110° - 120° vBMD [mg/cm³]</li>
+	<li>Division 1 sector 120° - 130° vBMD [mg/cm³]</li>
+	<li>Division 1 sector 130° - 140° vBMD [mg/cm³]</li>
+	<li>Division 1 sector 140° - 150° vBMD [mg/cm³]</li>
+	<li>Division 1 sector 150° - 160° vBMD [mg/cm³]</li>
+	<li>Division 1 sector 160° - 170° vBMD [mg/cm³]</li>
+	<li>Division 1 sector 170° - 180° vBMD [mg/cm³]</li>
+	<li>Division 1 sector 180° - 190° vBMD [mg/cm³]</li>
+	<li>Division 1 sector 190° - 200° vBMD [mg/cm³]</li>
+	<li>Division 1 sector 200° - 210° vBMD [mg/cm³]</li>
+	<li>Division 1 sector 210° - 220° vBMD [mg/cm³]</li>
+	<li>Division 1 sector 220° - 230° vBMD [mg/cm³]</li>
+	<li>Division 1 sector 230° - 240° vBMD [mg/cm³]</li>
+	<li>Division 1 sector 240° - 250° vBMD [mg/cm³]</li>
+	<li>Division 1 sector 250° - 260° vBMD [mg/cm³]</li>
+	<li>Division 1 sector 260° - 270° vBMD [mg/cm³]</li>
+	<li>Division 1 sector 270° - 280° vBMD [mg/cm³]</li>
+	<li>Division 1 sector 280° - 290° vBMD [mg/cm³]</li>
+	<li>Division 1 sector 290° - 300° vBMD [mg/cm³]</li>
+	<li>Division 1 sector 300° - 310° vBMD [mg/cm³]</li>
+	<li>Division 1 sector 310° - 320° vBMD [mg/cm³]</li>
+	<li>Division 1 sector 320° - 330° vBMD [mg/cm³]</li>
+	<li>Division 1 sector 330° - 340° vBMD [mg/cm³]</li>
+	<li>Division 1 sector 340° - 350° vBMD [mg/cm³]</li>
+	<li>Division 1 sector 350° - 360° vBMD [mg/cm³]</li>
+	<li>Division 2 sector 0° - 10° vBMD [mg/cm³]</li>
+	<li>Division 2 sector 10° - 20° vBMD [mg/cm³]</li>
+	<li>Division 2 sector 20° - 30° vBMD [mg/cm³]</li>
+	<li>Division 2 sector 30° - 40° vBMD [mg/cm³]</li>
+	<li>Division 2 sector 40° - 50° vBMD [mg/cm³]</li>
+	<li>Division 2 sector 50° - 60° vBMD [mg/cm³]</li>
+	<li>Division 2 sector 60° - 70° vBMD [mg/cm³]</li>
+	<li>Division 2 sector 70° - 80° vBMD [mg/cm³]</li>
+	<li>Division 2 sector 80° - 90° vBMD [mg/cm³]</li>
+	<li>Division 2 sector 90° - 100° vBMD [mg/cm³]</li>
+	<li>Division 2 sector 100° - 110° vBMD [mg/cm³]</li>
+	<li>Division 2 sector 110° - 120° vBMD [mg/cm³]</li>
+	<li>Division 2 sector 120° - 130° vBMD [mg/cm³]</li>
+	<li>Division 2 sector 130° - 140° vBMD [mg/cm³]</li>
+	<li>Division 2 sector 140° - 150° vBMD [mg/cm³]</li>
+	<li>Division 2 sector 150° - 160° vBMD [mg/cm³]</li>
+	<li>Division 2 sector 160° - 170° vBMD [mg/cm³]</li>
+	<li>Division 2 sector 170° - 180° vBMD [mg/cm³]</li>
+	<li>Division 2 sector 180° - 190° vBMD [mg/cm³]</li>
+	<li>Division 2 sector 190° - 200° vBMD [mg/cm³]</li>
+	<li>Division 2 sector 200° - 210° vBMD [mg/cm³]</li>
+	<li>Division 2 sector 210° - 220° vBMD [mg/cm³]</li>
+	<li>Division 2 sector 220° - 230° vBMD [mg/cm³]</li>
+	<li>Division 2 sector 230° - 240° vBMD [mg/cm³]</li>
+	<li>Division 2 sector 240° - 250° vBMD [mg/cm³]</li>
+	<li>Division 2 sector 250° - 260° vBMD [mg/cm³]</li>
+	<li>Division 2 sector 260° - 270° vBMD [mg/cm³]</li>
+	<li>Division 2 sector 270° - 280° vBMD [mg/cm³]</li>
+	<li>Division 2 sector 280° - 290° vBMD [mg/cm³]</li>
+	<li>Division 2 sector 290° - 300° vBMD [mg/cm³]</li>
+	<li>Division 2 sector 300° - 310° vBMD [mg/cm³]</li>
+	<li>Division 2 sector 310° - 320° vBMD [mg/cm³]</li>
+	<li>Division 2 sector 320° - 330° vBMD [mg/cm³]</li>
+	<li>Division 2 sector 330° - 340° vBMD [mg/cm³]</li>
+	<li>Division 2 sector 340° - 350° vBMD [mg/cm³]</li>
+	<li>Division 2 sector 350° - 360° vBMD [mg/cm³]</li>
+	<li>Division 3 sector 0° - 10° vBMD [mg/cm³]</li>
+	<li>Division 3 sector 10° - 20° vBMD [mg/cm³]</li>
+	<li>Division 3 sector 20° - 30° vBMD [mg/cm³]</li>
+	<li>Division 3 sector 30° - 40° vBMD [mg/cm³]</li>
+	<li>Division 3 sector 40° - 50° vBMD [mg/cm³]</li>
+	<li>Division 3 sector 50° - 60° vBMD [mg/cm³]</li>
+	<li>Division 3 sector 60° - 70° vBMD [mg/cm³]</li>
+	<li>Division 3 sector 70° - 80° vBMD [mg/cm³]</li>
+	<li>Division 3 sector 80° - 90° vBMD [mg/cm³]</li>
+	<li>Division 3 sector 90° - 100° vBMD [mg/cm³]</li>
+	<li>Division 3 sector 100° - 110° vBMD [mg/cm³]</li>
+	<li>Division 3 sector 110° - 120° vBMD [mg/cm³]</li>
+	<li>Division 3 sector 120° - 130° vBMD [mg/cm³]</li>
+	<li>Division 3 sector 130° - 140° vBMD [mg/cm³]</li>
+	<li>Division 3 sector 140° - 150° vBMD [mg/cm³]</li>
+	<li>Division 3 sector 150° - 160° vBMD [mg/cm³]</li>
+	<li>Division 3 sector 160° - 170° vBMD [mg/cm³]</li>
+	<li>Division 3 sector 170° - 180° vBMD [mg/cm³]</li>
+	<li>Division 3 sector 180° - 190° vBMD [mg/cm³]</li>
+	<li>Division 3 sector 190° - 200° vBMD [mg/cm³]</li>
+	<li>Division 3 sector 200° - 210° vBMD [mg/cm³]</li>
+	<li>Division 3 sector 210° - 220° vBMD [mg/cm³]</li>
+	<li>Division 3 sector 220° - 230° vBMD [mg/cm³]</li>
+	<li>Division 3 sector 230° - 240° vBMD [mg/cm³]</li>
+	<li>Division 3 sector 240° - 250° vBMD [mg/cm³]</li>
+	<li>Division 3 sector 250° - 260° vBMD [mg/cm³]</li>
+	<li>Division 3 sector 260° - 270° vBMD [mg/cm³]</li>
+	<li>Division 3 sector 270° - 280° vBMD [mg/cm³]</li>
+	<li>Division 3 sector 280° - 290° vBMD [mg/cm³]</li>
+	<li>Division 3 sector 290° - 300° vBMD [mg/cm³]</li>
+	<li>Division 3 sector 300° - 310° vBMD [mg/cm³]</li>
+	<li>Division 3 sector 310° - 320° vBMD [mg/cm³]</li>
+	<li>Division 3 sector 320° - 330° vBMD [mg/cm³]</li>
+	<li>Division 3 sector 330° - 340° vBMD [mg/cm³]</li>
+	<li>Division 3 sector 340° - 350° vBMD [mg/cm³]</li>
+	<li>Division 3 sector 350° - 360° vBMD [mg/cm³]</li>
+	<li>Division 4 sector 0° - 10° vBMD [mg/cm³]</li>
+	<li>Division 4 sector 10° - 20° vBMD [mg/cm³]</li>
+	<li>Division 4 sector 20° - 30° vBMD [mg/cm³]</li>
+	<li>Division 4 sector 30° - 40° vBMD [mg/cm³]</li>
+	<li>Division 4 sector 40° - 50° vBMD [mg/cm³]</li>
+	<li>Division 4 sector 50° - 60° vBMD [mg/cm³]</li>
+	<li>Division 4 sector 60° - 70° vBMD [mg/cm³]</li>
+	<li>Division 4 sector 70° - 80° vBMD [mg/cm³]</li>
+	<li>Division 4 sector 80° - 90° vBMD [mg/cm³]</li>
+	<li>Division 4 sector 90° - 100° vBMD [mg/cm³]</li>
+	<li>Division 4 sector 100° - 110° vBMD [mg/cm³]</li>
+	<li>Division 4 sector 110° - 120° vBMD [mg/cm³]</li>
+	<li>Division 4 sector 120° - 130° vBMD [mg/cm³]</li>
+	<li>Division 4 sector 130° - 140° vBMD [mg/cm³]</li>
+	<li>Division 4 sector 140° - 150° vBMD [mg/cm³]</li>
+	<li>Division 4 sector 150° - 160° vBMD [mg/cm³]</li>
+	<li>Division 4 sector 160° - 170° vBMD [mg/cm³]</li>
+	<li>Division 4 sector 170° - 180° vBMD [mg/cm³]</li>
+	<li>Division 4 sector 180° - 190° vBMD [mg/cm³]</li>
+	<li>Division 4 sector 190° - 200° vBMD [mg/cm³]</li>
+	<li>Division 4 sector 200° - 210° vBMD [mg/cm³]</li>
+	<li>Division 4 sector 210° - 220° vBMD [mg/cm³]</li>
+	<li>Division 4 sector 220° - 230° vBMD [mg/cm³]</li>
+	<li>Division 4 sector 230° - 240° vBMD [mg/cm³]</li>
+	<li>Division 4 sector 240° - 250° vBMD [mg/cm³]</li>
+	<li>Division 4 sector 250° - 260° vBMD [mg/cm³]</li>
+	<li>Division 4 sector 260° - 270° vBMD [mg/cm³]</li>
+	<li>Division 4 sector 270° - 280° vBMD [mg/cm³]</li>
+	<li>Division 4 sector 280° - 290° vBMD [mg/cm³]</li>
+	<li>Division 4 sector 290° - 300° vBMD [mg/cm³]</li>
+	<li>Division 4 sector 300° - 310° vBMD [mg/cm³]</li>
+	<li>Division 4 sector 310° - 320° vBMD [mg/cm³]</li>
+	<li>Division 4 sector 320° - 330° vBMD [mg/cm³]</li>
+	<li>Division 4 sector 330° - 340° vBMD [mg/cm³]</li>
+	<li>Division 4 sector 340° - 350° vBMD [mg/cm³]</li>
+	<li>Division 4 sector 350° - 360° vBMD [mg/cm³]</li>
+	<li>Division 5 sector 0° - 10° vBMD [mg/cm³]</li>
+	<li>Division 5 sector 10° - 20° vBMD [mg/cm³]</li>
+	<li>Division 5 sector 20° - 30° vBMD [mg/cm³]</li>
+	<li>Division 5 sector 30° - 40° vBMD [mg/cm³]</li>
+	<li>Division 5 sector 40° - 50° vBMD [mg/cm³]</li>
+	<li>Division 5 sector 50° - 60° vBMD [mg/cm³]</li>
+	<li>Division 5 sector 60° - 70° vBMD [mg/cm³]</li>
+	<li>Division 5 sector 70° - 80° vBMD [mg/cm³]</li>
+	<li>Division 5 sector 80° - 90° vBMD [mg/cm³]</li>
+	<li>Division 5 sector 90° - 100° vBMD [mg/cm³]</li>
+	<li>Division 5 sector 100° - 110° vBMD [mg/cm³]</li>
+	<li>Division 5 sector 110° - 120° vBMD [mg/cm³]</li>
+	<li>Division 5 sector 120° - 130° vBMD [mg/cm³]</li>
+	<li>Division 5 sector 130° - 140° vBMD [mg/cm³]</li>
+	<li>Division 5 sector 140° - 150° vBMD [mg/cm³]</li>
+	<li>Division 5 sector 150° - 160° vBMD [mg/cm³]</li>
+	<li>Division 5 sector 160° - 170° vBMD [mg/cm³]</li>
+	<li>Division 5 sector 170° - 180° vBMD [mg/cm³]</li>
+	<li>Division 5 sector 180° - 190° vBMD [mg/cm³]</li>
+	<li>Division 5 sector 190° - 200° vBMD [mg/cm³]</li>
+	<li>Division 5 sector 200° - 210° vBMD [mg/cm³]</li>
+	<li>Division 5 sector 210° - 220° vBMD [mg/cm³]</li>
+	<li>Division 5 sector 220° - 230° vBMD [mg/cm³]</li>
+	<li>Division 5 sector 230° - 240° vBMD [mg/cm³]</li>
+	<li>Division 5 sector 240° - 250° vBMD [mg/cm³]</li>
+	<li>Division 5 sector 250° - 260° vBMD [mg/cm³]</li>
+	<li>Division 5 sector 260° - 270° vBMD [mg/cm³]</li>
+	<li>Division 5 sector 270° - 280° vBMD [mg/cm³]</li>
+	<li>Division 5 sector 280° - 290° vBMD [mg/cm³]</li>
+	<li>Division 5 sector 290° - 300° vBMD [mg/cm³]</li>
+	<li>Division 5 sector 300° - 310° vBMD [mg/cm³]</li>
+	<li>Division 5 sector 310° - 320° vBMD [mg/cm³]</li>
+	<li>Division 5 sector 320° - 330° vBMD [mg/cm³]</li>
+	<li>Division 5 sector 330° - 340° vBMD [mg/cm³]</li>
+	<li>Division 5 sector 340° - 350° vBMD [mg/cm³]</li>
+	<li>Division 5 sector 350° - 360° vBMD [mg/cm³]</li>
+	<li>Division 6 sector 0° - 10° vBMD [mg/cm³]</li>
+	<li>Division 6 sector 10° - 20° vBMD [mg/cm³]</li>
+	<li>Division 6 sector 20° - 30° vBMD [mg/cm³]</li>
+	<li>Division 6 sector 30° - 40° vBMD [mg/cm³]</li>
+	<li>Division 6 sector 40° - 50° vBMD [mg/cm³]</li>
+	<li>Division 6 sector 50° - 60° vBMD [mg/cm³]</li>
+	<li>Division 6 sector 60° - 70° vBMD [mg/cm³]</li>
+	<li>Division 6 sector 70° - 80° vBMD [mg/cm³]</li>
+	<li>Division 6 sector 80° - 90° vBMD [mg/cm³]</li>
+	<li>Division 6 sector 90° - 100° vBMD [mg/cm³]</li>
+	<li>Division 6 sector 100° - 110° vBMD [mg/cm³]</li>
+	<li>Division 6 sector 110° - 120° vBMD [mg/cm³]</li>
+	<li>Division 6 sector 120° - 130° vBMD [mg/cm³]</li>
+	<li>Division 6 sector 130° - 140° vBMD [mg/cm³]</li>
+	<li>Division 6 sector 140° - 150° vBMD [mg/cm³]</li>
+	<li>Division 6 sector 150° - 160° vBMD [mg/cm³]</li>
+	<li>Division 6 sector 160° - 170° vBMD [mg/cm³]</li>
+	<li>Division 6 sector 170° - 180° vBMD [mg/cm³]</li>
+	<li>Division 6 sector 180° - 190° vBMD [mg/cm³]</li>
+	<li>Division 6 sector 190° - 200° vBMD [mg/cm³]</li>
+	<li>Division 6 sector 200° - 210° vBMD [mg/cm³]</li>
+	<li>Division 6 sector 210° - 220° vBMD [mg/cm³]</li>
+	<li>Division 6 sector 220° - 230° vBMD [mg/cm³]</li>
+	<li>Division 6 sector 230° - 240° vBMD [mg/cm³]</li>
+	<li>Division 6 sector 240° - 250° vBMD [mg/cm³]</li>
+	<li>Division 6 sector 250° - 260° vBMD [mg/cm³]</li>
+	<li>Division 6 sector 260° - 270° vBMD [mg/cm³]</li>
+	<li>Division 6 sector 270° - 280° vBMD [mg/cm³]</li>
+	<li>Division 6 sector 280° - 290° vBMD [mg/cm³]</li>
+	<li>Division 6 sector 290° - 300° vBMD [mg/cm³]</li>
+	<li>Division 6 sector 300° - 310° vBMD [mg/cm³]</li>
+	<li>Division 6 sector 310° - 320° vBMD [mg/cm³]</li>
+	<li>Division 6 sector 320° - 330° vBMD [mg/cm³]</li>
+	<li>Division 6 sector 330° - 340° vBMD [mg/cm³]</li>
+	<li>Division 6 sector 340° - 350° vBMD [mg/cm³]</li>
+	<li>Division 6 sector 350° - 360° vBMD [mg/cm³]</li>
+	<li>Division 7 sector 0° - 10° vBMD [mg/cm³]</li>
+	<li>Division 7 sector 10° - 20° vBMD [mg/cm³]</li>
+	<li>Division 7 sector 20° - 30° vBMD [mg/cm³]</li>
+	<li>Division 7 sector 30° - 40° vBMD [mg/cm³]</li>
+	<li>Division 7 sector 40° - 50° vBMD [mg/cm³]</li>
+	<li>Division 7 sector 50° - 60° vBMD [mg/cm³]</li>
+	<li>Division 7 sector 60° - 70° vBMD [mg/cm³]</li>
+	<li>Division 7 sector 70° - 80° vBMD [mg/cm³]</li>
+	<li>Division 7 sector 80° - 90° vBMD [mg/cm³]</li>
+	<li>Division 7 sector 90° - 100° vBMD [mg/cm³]</li>
+	<li>Division 7 sector 100° - 110° vBMD [mg/cm³]</li>
+	<li>Division 7 sector 110° - 120° vBMD [mg/cm³]</li>
+	<li>Division 7 sector 120° - 130° vBMD [mg/cm³]</li>
+	<li>Division 7 sector 130° - 140° vBMD [mg/cm³]</li>
+	<li>Division 7 sector 140° - 150° vBMD [mg/cm³]</li>
+	<li>Division 7 sector 150° - 160° vBMD [mg/cm³]</li>
+	<li>Division 7 sector 160° - 170° vBMD [mg/cm³]</li>
+	<li>Division 7 sector 170° - 180° vBMD [mg/cm³]</li>
+	<li>Division 7 sector 180° - 190° vBMD [mg/cm³]</li>
+	<li>Division 7 sector 190° - 200° vBMD [mg/cm³]</li>
+	<li>Division 7 sector 200° - 210° vBMD [mg/cm³]</li>
+	<li>Division 7 sector 210° - 220° vBMD [mg/cm³]</li>
+	<li>Division 7 sector 220° - 230° vBMD [mg/cm³]</li>
+	<li>Division 7 sector 230° - 240° vBMD [mg/cm³]</li>
+	<li>Division 7 sector 240° - 250° vBMD [mg/cm³]</li>
+	<li>Division 7 sector 250° - 260° vBMD [mg/cm³]</li>
+	<li>Division 7 sector 260° - 270° vBMD [mg/cm³]</li>
+	<li>Division 7 sector 270° - 280° vBMD [mg/cm³]</li>
+	<li>Division 7 sector 280° - 290° vBMD [mg/cm³]</li>
+	<li>Division 7 sector 290° - 300° vBMD [mg/cm³]</li>
+	<li>Division 7 sector 300° - 310° vBMD [mg/cm³]</li>
+	<li>Division 7 sector 310° - 320° vBMD [mg/cm³]</li>
+	<li>Division 7 sector 320° - 330° vBMD [mg/cm³]</li>
+	<li>Division 7 sector 330° - 340° vBMD [mg/cm³]</li>
+	<li>Division 7 sector 340° - 350° vBMD [mg/cm³]</li>
+	<li>Division 7 sector 350° - 360° vBMD [mg/cm³]</li>
+	<li>Division 8 sector 0° - 10° vBMD [mg/cm³]</li>
+	<li>Division 8 sector 10° - 20° vBMD [mg/cm³]</li>
+	<li>Division 8 sector 20° - 30° vBMD [mg/cm³]</li>
+	<li>Division 8 sector 30° - 40° vBMD [mg/cm³]</li>
+	<li>Division 8 sector 40° - 50° vBMD [mg/cm³]</li>
+	<li>Division 8 sector 50° - 60° vBMD [mg/cm³]</li>
+	<li>Division 8 sector 60° - 70° vBMD [mg/cm³]</li>
+	<li>Division 8 sector 70° - 80° vBMD [mg/cm³]</li>
+	<li>Division 8 sector 80° - 90° vBMD [mg/cm³]</li>
+	<li>Division 8 sector 90° - 100° vBMD [mg/cm³]</li>
+	<li>Division 8 sector 100° - 110° vBMD [mg/cm³]</li>
+	<li>Division 8 sector 110° - 120° vBMD [mg/cm³]</li>
+	<li>Division 8 sector 120° - 130° vBMD [mg/cm³]</li>
+	<li>Division 8 sector 130° - 140° vBMD [mg/cm³]</li>
+	<li>Division 8 sector 140° - 150° vBMD [mg/cm³]</li>
+	<li>Division 8 sector 150° - 160° vBMD [mg/cm³]</li>
+	<li>Division 8 sector 160° - 170° vBMD [mg/cm³]</li>
+	<li>Division 8 sector 170° - 180° vBMD [mg/cm³]</li>
+	<li>Division 8 sector 180° - 190° vBMD [mg/cm³]</li>
+	<li>Division 8 sector 190° - 200° vBMD [mg/cm³]</li>
+	<li>Division 8 sector 200° - 210° vBMD [mg/cm³]</li>
+	<li>Division 8 sector 210° - 220° vBMD [mg/cm³]</li>
+	<li>Division 8 sector 220° - 230° vBMD [mg/cm³]</li>
+	<li>Division 8 sector 230° - 240° vBMD [mg/cm³]</li>
+	<li>Division 8 sector 240° - 250° vBMD [mg/cm³]</li>
+	<li>Division 8 sector 250° - 260° vBMD [mg/cm³]</li>
+	<li>Division 8 sector 260° - 270° vBMD [mg/cm³]</li>
+	<li>Division 8 sector 270° - 280° vBMD [mg/cm³]</li>
+	<li>Division 8 sector 280° - 290° vBMD [mg/cm³]</li>
+	<li>Division 8 sector 290° - 300° vBMD [mg/cm³]</li>
+	<li>Division 8 sector 300° - 310° vBMD [mg/cm³]</li>
+	<li>Division 8 sector 310° - 320° vBMD [mg/cm³]</li>
+	<li>Division 8 sector 320° - 330° vBMD [mg/cm³]</li>
+	<li>Division 8 sector 330° - 340° vBMD [mg/cm³]</li>
+	<li>Division 8 sector 340° - 350° vBMD [mg/cm³]</li>
+	<li>Division 8 sector 350° - 360° vBMD [mg/cm³]</li>
+	<li>Division 9 sector 0° - 10° vBMD [mg/cm³]</li>
+	<li>Division 9 sector 10° - 20° vBMD [mg/cm³]</li>
+	<li>Division 9 sector 20° - 30° vBMD [mg/cm³]</li>
+	<li>Division 9 sector 30° - 40° vBMD [mg/cm³]</li>
+	<li>Division 9 sector 40° - 50° vBMD [mg/cm³]</li>
+	<li>Division 9 sector 50° - 60° vBMD [mg/cm³]</li>
+	<li>Division 9 sector 60° - 70° vBMD [mg/cm³]</li>
+	<li>Division 9 sector 70° - 80° vBMD [mg/cm³]</li>
+	<li>Division 9 sector 80° - 90° vBMD [mg/cm³]</li>
+	<li>Division 9 sector 90° - 100° vBMD [mg/cm³]</li>
+	<li>Division 9 sector 100° - 110° vBMD [mg/cm³]</li>
+	<li>Division 9 sector 110° - 120° vBMD [mg/cm³]</li>
+	<li>Division 9 sector 120° - 130° vBMD [mg/cm³]</li>
+	<li>Division 9 sector 130° - 140° vBMD [mg/cm³]</li>
+	<li>Division 9 sector 140° - 150° vBMD [mg/cm³]</li>
+	<li>Division 9 sector 150° - 160° vBMD [mg/cm³]</li>
+	<li>Division 9 sector 160° - 170° vBMD [mg/cm³]</li>
+	<li>Division 9 sector 170° - 180° vBMD [mg/cm³]</li>
+	<li>Division 9 sector 180° - 190° vBMD [mg/cm³]</li>
+	<li>Division 9 sector 190° - 200° vBMD [mg/cm³]</li>
+	<li>Division 9 sector 200° - 210° vBMD [mg/cm³]</li>
+	<li>Division 9 sector 210° - 220° vBMD [mg/cm³]</li>
+	<li>Division 9 sector 220° - 230° vBMD [mg/cm³]</li>
+	<li>Division 9 sector 230° - 240° vBMD [mg/cm³]</li>
+	<li>Division 9 sector 240° - 250° vBMD [mg/cm³]</li>
+	<li>Division 9 sector 250° - 260° vBMD [mg/cm³]</li>
+	<li>Division 9 sector 260° - 270° vBMD [mg/cm³]</li>
+	<li>Division 9 sector 270° - 280° vBMD [mg/cm³]</li>
+	<li>Division 9 sector 280° - 290° vBMD [mg/cm³]</li>
+	<li>Division 9 sector 290° - 300° vBMD [mg/cm³]</li>
+	<li>Division 9 sector 300° - 310° vBMD [mg/cm³]</li>
+	<li>Division 9 sector 310° - 320° vBMD [mg/cm³]</li>
+	<li>Division 9 sector 320° - 330° vBMD [mg/cm³]</li>
+	<li>Division 9 sector 330° - 340° vBMD [mg/cm³]</li>
+	<li>Division 9 sector 340° - 350° vBMD [mg/cm³]</li>
+	<li>Division 9 sector 350° - 360° vBMD [mg/cm³]</li>
+	<li>Division 10 sector 0° - 10° vBMD [mg/cm³]</li>
+	<li>Division 10 sector 10° - 20° vBMD [mg/cm³]</li>
+	<li>Division 10 sector 20° - 30° vBMD [mg/cm³]</li>
+	<li>Division 10 sector 30° - 40° vBMD [mg/cm³]</li>
+	<li>Division 10 sector 40° - 50° vBMD [mg/cm³]</li>
+	<li>Division 10 sector 50° - 60° vBMD [mg/cm³]</li>
+	<li>Division 10 sector 60° - 70° vBMD [mg/cm³]</li>
+	<li>Division 10 sector 70° - 80° vBMD [mg/cm³]</li>
+	<li>Division 10 sector 80° - 90° vBMD [mg/cm³]</li>
+	<li>Division 10 sector 90° - 100° vBMD [mg/cm³]</li>
+	<li>Division 10 sector 100° - 110° vBMD [mg/cm³]</li>
+	<li>Division 10 sector 110° - 120° vBMD [mg/cm³]</li>
+	<li>Division 10 sector 120° - 130° vBMD [mg/cm³]</li>
+	<li>Division 10 sector 130° - 140° vBMD [mg/cm³]</li>
+	<li>Division 10 sector 140° - 150° vBMD [mg/cm³]</li>
+	<li>Division 10 sector 150° - 160° vBMD [mg/cm³]</li>
+	<li>Division 10 sector 160° - 170° vBMD [mg/cm³]</li>
+	<li>Division 10 sector 170° - 180° vBMD [mg/cm³]</li>
+	<li>Division 10 sector 180° - 190° vBMD [mg/cm³]</li>
+	<li>Division 10 sector 190° - 200° vBMD [mg/cm³]</li>
+	<li>Division 10 sector 200° - 210° vBMD [mg/cm³]</li>
+	<li>Division 10 sector 210° - 220° vBMD [mg/cm³]</li>
+	<li>Division 10 sector 220° - 230° vBMD [mg/cm³]</li>
+	<li>Division 10 sector 230° - 240° vBMD [mg/cm³]</li>
+	<li>Division 10 sector 240° - 250° vBMD [mg/cm³]</li>
+	<li>Division 10 sector 250° - 260° vBMD [mg/cm³]</li>
+	<li>Division 10 sector 260° - 270° vBMD [mg/cm³]</li>
+	<li>Division 10 sector 270° - 280° vBMD [mg/cm³]</li>
+	<li>Division 10 sector 280° - 290° vBMD [mg/cm³]</li>
+	<li>Division 10 sector 290° - 300° vBMD [mg/cm³]</li>
+	<li>Division 10 sector 300° - 310° vBMD [mg/cm³]</li>
+	<li>Division 10 sector 310° - 320° vBMD [mg/cm³]</li>
+	<li>Division 10 sector 320° - 330° vBMD [mg/cm³]</li>
+	<li>Division 10 sector 330° - 340° vBMD [mg/cm³]</li>
+	<li>Division 10 sector 340° - 350° vBMD [mg/cm³]</li>
+	<li>Division 10 sector 350° - 360° vBMD [mg/cm³]</li>
+	<li>Peeled mean vBMD [mg/cm³]</li>
+	<li>Radial division 0 vBMD [mg/cm³]</li>
+	<li>Radial division 1 vBMD [mg/cm³]</li>
+	<li>Radial division 2 vBMD [mg/cm³]</li>
+	<li>Polar sector 0 vBMD [mg/cm³]</li>
+	<li>Polar sector 1 vBMD [mg/cm³]</li>
+	<li>Polar sector 2 vBMD [mg/cm³]</li>
+	<li>Polar sector 3 vBMD [mg/cm³]</li>
+	<li>Polar sector 4 vBMD [mg/cm³]</li>
+	<li>Polar sector 5 vBMD [mg/cm³]</li>
+	<li>Polar sector 6 vBMD [mg/cm³]</li>
+	<li>Polar sector 7 vBMD [mg/cm³]</li>
+	<li>Polar sector 8 vBMD [mg/cm³]</li>
+	<li>Polar sector 9 vBMD [mg/cm³]</li>
+	<li>Polar sector 10 vBMD [mg/cm³]</li>
+	<li>Polar sector 11 vBMD [mg/cm³]</li>
+	<li>Polar sector 12 vBMD [mg/cm³]</li>
+	<li>Polar sector 13 vBMD [mg/cm³]</li>
+	<li>Polar sector 14 vBMD [mg/cm³]</li>
+	<li>Polar sector 15 vBMD [mg/cm³]</li>
+	<li>Polar sector 16 vBMD [mg/cm³]</li>
+	<li>Polar sector 17 vBMD [mg/cm³]</li>
+	<li>Polar sector 18 vBMD [mg/cm³]</li>
+	<li>Polar sector 19 vBMD [mg/cm³]</li>
+	<li>Polar sector 20 vBMD [mg/cm³]</li>
+	<li>Polar sector 21 vBMD [mg/cm³]</li>
+	<li>Polar sector 22 vBMD [mg/cm³]</li>
+	<li>Polar sector 23 vBMD [mg/cm³]</li>
+	<li>Polar sector 24 vBMD [mg/cm³]</li>
+	<li>Polar sector 25 vBMD [mg/cm³]</li>
+	<li>Polar sector 26 vBMD [mg/cm³]</li>
+	<li>Polar sector 27 vBMD [mg/cm³]</li>
+	<li>Polar sector 28 vBMD [mg/cm³]</li>
+	<li>Polar sector 29 vBMD [mg/cm³]</li>
+	<li>Polar sector 30 vBMD [mg/cm³]</li>
+	<li>Polar sector 31 vBMD [mg/cm³]</li>
+	<li>Polar sector 32 vBMD [mg/cm³]</li>
+	<li>Polar sector 33 vBMD [mg/cm³]</li>
+	<li>Polar sector 34 vBMD [mg/cm³]</li>
+	<li>Polar sector 35 vBMD [mg/cm³]</li>
+	<li>0° - 10° endocortical radius [mm]</li>
+	<li>10° - 20° endocortical radius [mm]</li>
+	<li>20° - 30° endocortical radius [mm]</li>
+	<li>30° - 40° endocortical radius [mm]</li>
+	<li>40° - 50° endocortical radius [mm]</li>
+	<li>50° - 60° endocortical radius [mm]</li>
+	<li>60° - 70° endocortical radius [mm]</li>
+	<li>70° - 80° endocortical radius [mm]</li>
+	<li>80° - 90° endocortical radius [mm]</li>
+	<li>90° - 100° endocortical radius [mm]</li>
+	<li>100° - 110° endocortical radius [mm]</li>
+	<li>110° - 120° endocortical radius [mm]</li>
+	<li>120° - 130° endocortical radius [mm]</li>
+	<li>130° - 140° endocortical radius [mm]</li>
+	<li>140° - 150° endocortical radius [mm]</li>
+	<li>150° - 160° endocortical radius [mm]</li>
+	<li>160° - 170° endocortical radius [mm]</li>
+	<li>170° - 180° endocortical radius [mm]</li>
+	<li>180° - 190° endocortical radius [mm]</li>
+	<li>190° - 200° endocortical radius [mm]</li>
+	<li>200° - 210° endocortical radius [mm]</li>
+	<li>210° - 220° endocortical radius [mm]</li>
+	<li>220° - 230° endocortical radius [mm]</li>
+	<li>230° - 240° endocortical radius [mm]</li>
+	<li>240° - 250° endocortical radius [mm]</li>
+	<li>250° - 260° endocortical radius [mm]</li>
+	<li>260° - 270° endocortical radius [mm]</li>
+	<li>270° - 280° endocortical radius [mm]</li>
+	<li>280° - 290° endocortical radius [mm]</li>
+	<li>290° - 300° endocortical radius [mm]</li>
+	<li>300° - 310° endocortical radius [mm]</li>
+	<li>310° - 320° endocortical radius [mm]</li>
+	<li>320° - 330° endocortical radius [mm]</li>
+	<li>330° - 340° endocortical radius [mm]</li>
+	<li>340° - 350° endocortical radius [mm]</li>
+	<li>350° - 360° endocortical radius [mm]</li>
+	<li>0° - 10° pericortical radius [mm]</li>
+	<li>10° - 20° pericortical radius [mm]</li>
+	<li>20° - 30° pericortical radius [mm]</li>
+	<li>30° - 40° pericortical radius [mm]</li>
+	<li>40° - 50° pericortical radius [mm]</li>
+	<li>50° - 60° pericortical radius [mm]</li>
+	<li>60° - 70° pericortical radius [mm]</li>
+	<li>70° - 80° pericortical radius [mm]</li>
+	<li>80° - 90° pericortical radius [mm]</li>
+	<li>90° - 100° pericortical radius [mm]</li>
+	<li>100° - 110° pericortical radius [mm]</li>
+	<li>110° - 120° pericortical radius [mm]</li>
+	<li>120° - 130° pericortical radius [mm]</li>
+	<li>130° - 140° pericortical radius [mm]</li>
+	<li>140° - 150° pericortical radius [mm]</li>
+	<li>150° - 160° pericortical radius [mm]</li>
+	<li>160° - 170° pericortical radius [mm]</li>
+	<li>170° - 180° pericortical radius [mm]</li>
+	<li>180° - 190° pericortical radius [mm]</li>
+	<li>190° - 200° pericortical radius [mm]</li>
+	<li>200° - 210° pericortical radius [mm]</li>
+	<li>210° - 220° pericortical radius [mm]</li>
+	<li>220° - 230° pericortical radius [mm]</li>
+	<li>230° - 240° pericortical radius [mm]</li>
+	<li>240° - 250° pericortical radius [mm]</li>
+	<li>250° - 260° pericortical radius [mm]</li>
+	<li>260° - 270° pericortical radius [mm]</li>
+	<li>270° - 280° pericortical radius [mm]</li>
+	<li>280° - 290° pericortical radius [mm]</li>
+	<li>290° - 300° pericortical radius [mm]</li>
+	<li>300° - 310° pericortical radius [mm]</li>
+	<li>310° - 320° pericortical radius [mm]</li>
+	<li>320° - 330° pericortical radius [mm]</li>
+	<li>330° - 340° pericortical radius [mm]</li>
+	<li>340° - 350° pericortical radius [mm]</li>
+	<li>350° - 360° pericortical radius [mm]</li>
+	<li>0° - 10° endocortical vBMD [mg/cm³]</li>
+	<li>10° - 20° endocortical vBMD [mg/cm³]</li>
+	<li>20° - 30° endocortical vBMD [mg/cm³]</li>
+	<li>30° - 40° endocortical vBMD [mg/cm³]</li>
+	<li>40° - 50° endocortical vBMD [mg/cm³]</li>
+	<li>50° - 60° endocortical vBMD [mg/cm³]</li>
+	<li>60° - 70° endocortical vBMD [mg/cm³]</li>
+	<li>70° - 80° endocortical vBMD [mg/cm³]</li>
+	<li>80° - 90° endocortical vBMD [mg/cm³]</li>
+	<li>90° - 100° endocortical vBMD [mg/cm³]</li>
+	<li>100° - 110° endocortical vBMD [mg/cm³]</li>
+	<li>110° - 120° endocortical vBMD [mg/cm³]</li>
+	<li>120° - 130° endocortical vBMD [mg/cm³]</li>
+	<li>130° - 140° endocortical vBMD [mg/cm³]</li>
+	<li>140° - 150° endocortical vBMD [mg/cm³]</li>
+	<li>150° - 160° endocortical vBMD [mg/cm³]</li>
+	<li>160° - 170° endocortical vBMD [mg/cm³]</li>
+	<li>170° - 180° endocortical vBMD [mg/cm³]</li>
+	<li>180° - 190° endocortical vBMD [mg/cm³]</li>
+	<li>190° - 200° endocortical vBMD [mg/cm³]</li>
+	<li>200° - 210° endocortical vBMD [mg/cm³]</li>
+	<li>210° - 220° endocortical vBMD [mg/cm³]</li>
+	<li>220° - 230° endocortical vBMD [mg/cm³]</li>
+	<li>230° - 240° endocortical vBMD [mg/cm³]</li>
+	<li>240° - 250° endocortical vBMD [mg/cm³]</li>
+	<li>250° - 260° endocortical vBMD [mg/cm³]</li>
+	<li>260° - 270° endocortical vBMD [mg/cm³]</li>
+	<li>270° - 280° endocortical vBMD [mg/cm³]</li>
+	<li>280° - 290° endocortical vBMD [mg/cm³]</li>
+	<li>290° - 300° endocortical vBMD [mg/cm³]</li>
+	<li>300° - 310° endocortical vBMD [mg/cm³]</li>
+	<li>310° - 320° endocortical vBMD [mg/cm³]</li>
+	<li>320° - 330° endocortical vBMD [mg/cm³]</li>
+	<li>330° - 340° endocortical vBMD [mg/cm³]</li>
+	<li>340° - 350° endocortical vBMD [mg/cm³]</li>
+	<li>350° - 360° endocortical vBMD [mg/cm³]</li>
+	<li>0° - 10° midcortical vBMD [mg/cm³]</li>
+	<li>10° - 20° midcortical vBMD [mg/cm³]</li>
+	<li>20° - 30° midcortical vBMD [mg/cm³]</li>
+	<li>30° - 40° midcortical vBMD [mg/cm³]</li>
+	<li>40° - 50° midcortical vBMD [mg/cm³]</li>
+	<li>50° - 60° midcortical vBMD [mg/cm³]</li>
+	<li>60° - 70° midcortical vBMD [mg/cm³]</li>
+	<li>70° - 80° midcortical vBMD [mg/cm³]</li>
+	<li>80° - 90° midcortical vBMD [mg/cm³]</li>
+	<li>90° - 100° midcortical vBMD [mg/cm³]</li>
+	<li>100° - 110° midcortical vBMD [mg/cm³]</li>
+	<li>110° - 120° midcortical vBMD [mg/cm³]</li>
+	<li>120° - 130° midcortical vBMD [mg/cm³]</li>
+	<li>130° - 140° midcortical vBMD [mg/cm³]</li>
+	<li>140° - 150° midcortical vBMD [mg/cm³]</li>
+	<li>150° - 160° midcortical vBMD [mg/cm³]</li>
+	<li>160° - 170° midcortical vBMD [mg/cm³]</li>
+	<li>170° - 180° midcortical vBMD [mg/cm³]</li>
+	<li>180° - 190° midcortical vBMD [mg/cm³]</li>
+	<li>190° - 200° midcortical vBMD [mg/cm³]</li>
+	<li>200° - 210° midcortical vBMD [mg/cm³]</li>
+	<li>210° - 220° midcortical vBMD [mg/cm³]</li>
+	<li>220° - 230° midcortical vBMD [mg/cm³]</li>
+	<li>230° - 240° midcortical vBMD [mg/cm³]</li>
+	<li>240° - 250° midcortical vBMD [mg/cm³]</li>
+	<li>250° - 260° midcortical vBMD [mg/cm³]</li>
+	<li>260° - 270° midcortical vBMD [mg/cm³]</li>
+	<li>270° - 280° midcortical vBMD [mg/cm³]</li>
+	<li>280° - 290° midcortical vBMD [mg/cm³]</li>
+	<li>290° - 300° midcortical vBMD [mg/cm³]</li>
+	<li>300° - 310° midcortical vBMD [mg/cm³]</li>
+	<li>310° - 320° midcortical vBMD [mg/cm³]</li>
+	<li>320° - 330° midcortical vBMD [mg/cm³]</li>
+	<li>330° - 340° midcortical vBMD [mg/cm³]</li>
+	<li>340° - 350° midcortical vBMD [mg/cm³]</li>
+	<li>350° - 360° midcortical vBMD [mg/cm³]</li>
+	<li>0° - 10° pericortical vBMD [mg/cm³]</li>
+	<li>10° - 20° pericortical vBMD [mg/cm³]</li>
+	<li>20° - 30° pericortical vBMD [mg/cm³]</li>
+	<li>30° - 40° pericortical vBMD [mg/cm³]</li>
+	<li>40° - 50° pericortical vBMD [mg/cm³]</li>
+	<li>50° - 60° pericortical vBMD [mg/cm³]</li>
+	<li>60° - 70° pericortical vBMD [mg/cm³]</li>
+	<li>70° - 80° pericortical vBMD [mg/cm³]</li>
+	<li>80° - 90° pericortical vBMD [mg/cm³]</li>
+	<li>90° - 100° pericortical vBMD [mg/cm³]</li>
+	<li>100° - 110° pericortical vBMD [mg/cm³]</li>
+	<li>110° - 120° pericortical vBMD [mg/cm³]</li>
+	<li>120° - 130° pericortical vBMD [mg/cm³]</li>
+	<li>130° - 140° pericortical vBMD [mg/cm³]</li>
+	<li>140° - 150° pericortical vBMD [mg/cm³]</li>
+	<li>150° - 160° pericortical vBMD [mg/cm³]</li>
+	<li>160° - 170° pericortical vBMD [mg/cm³]</li>
+	<li>170° - 180° pericortical vBMD [mg/cm³]</li>
+	<li>180° - 190° pericortical vBMD [mg/cm³]</li>
+	<li>190° - 200° pericortical vBMD [mg/cm³]</li>
+	<li>200° - 210° pericortical vBMD [mg/cm³]</li>
+	<li>210° - 220° pericortical vBMD [mg/cm³]</li>
+	<li>220° - 230° pericortical vBMD [mg/cm³]</li>
+	<li>230° - 240° pericortical vBMD [mg/cm³]</li>
+	<li>240° - 250° pericortical vBMD [mg/cm³]</li>
+	<li>250° - 260° pericortical vBMD [mg/cm³]</li>
+	<li>260° - 270° pericortical vBMD [mg/cm³]</li>
+	<li>270° - 280° pericortical vBMD [mg/cm³]</li>
+	<li>280° - 290° pericortical vBMD [mg/cm³]</li>
+	<li>290° - 300° pericortical vBMD [mg/cm³]</li>
+	<li>300° - 310° pericortical vBMD [mg/cm³]</li>
+	<li>310° - 320° pericortical vBMD [mg/cm³]</li>
+	<li>320° - 330° pericortical vBMD [mg/cm³]</li>
+	<li>330° - 340° pericortical vBMD [mg/cm³]</li>
+	<li>340° - 350° pericortical vBMD [mg/cm³]</li>
+	<li>350° - 360° pericortical vBMD [mg/cm³]</li>
+
 </ul>
 
 <h3>Batch processing sample</h3>
